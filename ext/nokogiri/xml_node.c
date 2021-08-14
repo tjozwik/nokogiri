@@ -115,23 +115,23 @@ relink_namespace(xmlNodePtr reparented)
     }
   }
 
-  /* Only walk all children if there actually is a namespace we need to */
-  /* reparent. */
-  if (NULL == reparented->ns) { return; }
-
-  /* When a node gets reparented, walk it's children to make sure that */
-  /* their namespaces are reparented as well. */
-  child = reparented->children;
-  while (NULL != child) {
-    relink_namespace(child);
-    child = child->next;
-  }
-
   if (reparented->type == XML_ELEMENT_NODE) {
     attr = reparented->properties;
     while (NULL != attr) {
       relink_namespace((xmlNodePtr)attr);
       attr = attr->next;
+    }
+  }
+
+  /* Only walk all children if there actually is a namespace we need to */
+  /* reparent. */
+  if (reparented->ns) {
+    /* When a node gets reparented, walk it's children to make sure that */
+    /* their namespaces are reparented as well. */
+    child = reparented->children;
+    while (NULL != child) {
+      relink_namespace(child);
+      child = child->next;
     }
   }
 }
@@ -351,7 +351,10 @@ ok:
    */
   DATA_PTR(reparentee_obj) = reparented ;
 
-  relink_namespace(reparented);
+  /* HTML doesn't have namespaces */
+  if (!rb_obj_is_kind_of(DOC_RUBY_OBJECT(reparented->doc), cNokogiriHtml4Document)) {
+    relink_namespace(reparented);
+  }
 
   reparented_obj = noko_xml_node_wrap(Qnil, reparented);
 
