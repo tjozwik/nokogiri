@@ -198,14 +198,14 @@ CrossRuby = Struct.new(:version, :platform) do
   end
 
   def dll_ref_versions
-    case platform
-    when X86_LINUX_PLATFORM_REGEX
+    # case platform
+    # when X86_LINUX_PLATFORM_REGEX
       { "GLIBC" => "2.17" }
-    when AARCH_LINUX_PLATFORM_REGEX, ARM_LINUX_PLATFORM_REGEX
-      { "GLIBC" => "2.29" }
-    else
-      raise "CrossRuby.dll_ref_versions: unmatched platform: #{platform}"
-    end
+    # when AARCH_LINUX_PLATFORM_REGEX, ARM_LINUX_PLATFORM_REGEX
+      # { "GLIBC" => "2.29" }
+    # else
+      # raise "CrossRuby.dll_ref_versions: unmatched platform: #{platform}"
+    # end
   end
 end
 
